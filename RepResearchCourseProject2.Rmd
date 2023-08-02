@@ -173,3 +173,42 @@ g2 <- ggplot(economicCost[1:10,], aes(x=reorder(EVTYPE, -ECONOMICCOST),y=ECONOMI
 g2
 ```
 
+#Conclusions
+```{r}
+print(g1)
+print(g2)
+```
+Save figures as png
+```{r}
+png("fatalitiesinjuries.png")
+healthImpact <- stormData %>% 
+                group_by(EVTYPE) %>% 
+                summarise(HEALTHIMP = sum(HEALTHIMP)) %>% 
+                arrange(desc(HEALTHIMP))
+#healthImpact[1:10,]
+g1 <- ggplot(healthImpact[1:10,], aes(x=reorder(EVTYPE, -HEALTHIMP),y=HEALTHIMP,color=EVTYPE)) + 
+      geom_bar(stat="identity", fill="white") + 
+      theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+      xlab("Event") + ylab("Number of fatalities and injuries") +
+      theme(legend.position="none") +
+      ggtitle("Fatalities and injuries in the US caused by severe weather events")
+g1
+dev.off()
+```
+```{r}
+png("economiccost.png")
+economicCost <- stormData %>% 
+                group_by(EVTYPE) %>% 
+                summarise(ECONOMICCOST = sum(ECONOMICCOST)) %>% 
+                arrange(desc(ECONOMICCOST))
+#economicCost[1:10,]
+g2 <- ggplot(economicCost[1:10,], aes(x=reorder(EVTYPE, -ECONOMICCOST),y=ECONOMICCOST,color=EVTYPE)) + 
+      geom_bar(stat="identity", fill="white") + 
+      theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+      xlab("Event") + ylab("Economic cost in USD") +
+      theme(legend.position="none") +
+      ggtitle("Economic cost in the US caused by severe weather events")
+g2
+dev.off()
+```
+
